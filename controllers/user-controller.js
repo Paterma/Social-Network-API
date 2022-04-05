@@ -1,4 +1,4 @@
-const { User, Thought } = require('../models');
+const User = require('../models/user');
 
 const userController = {
     getUser(req, res) { //get all users
@@ -25,12 +25,6 @@ getUserById({params}, res) {
         res.status(400).json(err)
     })
 },
-//create new user
-createUser({body}, res) {
-    User.create(body)
-    .then(userData => res.json(userData))
-    .catch(err => res.status(400).json(err))
-},
 //update user by id
 updateUser({params, body}, res) {
     User.findOneAndUpdate({_id: params.id}, body, {new:true, runValidators: true})
@@ -40,6 +34,16 @@ updateUser({params, body}, res) {
         return;
     } res.json(userData)
     }) .catch(err => res.status(400).json(err))
+},
+//create new user
+createUser({body}, res) {
+    User.create(body)
+    .then(userData => {
+        console.log(userData)
+        res.json(userData)
+        console.log("Success")
+    })
+    .catch(err => res.status(400).json(err))
 },
 //delete a user
 deleteUser({params}, res) {

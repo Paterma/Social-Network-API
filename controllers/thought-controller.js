@@ -1,6 +1,5 @@
-const { Thought } = require(`..models/thought`);
-const { userInfo } = require("os");
-const User = require(`../models/User`);
+const { Thought } = require(`../models/thought`);
+const User = require(`../models/user`);
 
 //create a thought object
 const thoughtController = {
@@ -26,12 +25,24 @@ getThoughtById({params}, res) {
         res.status(400).json({message: `No thought found`})
     })
 }, 
+    // update a thought 
+    updateThought({ params, body}, res) {
+        Thought.findOneAndUpdate({_id: params.thoughtId}, body, {new: true, runValidators: true}) //show the updated thought
+        .then(thoughtData => {
+            if (!thoughtData) {
+                res.status(404).json({message: `No thought found`})
+                return;
+            } res.json(thoughtData)
+        }) .catch(err => res.status(400).json(err))
+    },
 // add a thought
 addThought({params, body}, res) {
+    console.log
     Thought.create(body)
-    .then(({_id}) => {
-        return userInfo.findOneAndUpdate(
-            {_id: paramas.userId},
+    .then((data) => {
+        console.log(data)
+        return User.findOneAndUpdate(
+            {_id: params.userId},
             {$push: {thoughts: _id}}, //pushing the new thought to the array
             {new: true} //show the new thought
         )
@@ -43,16 +54,6 @@ addThought({params, body}, res) {
             }
             res.json(userData)
         }) .catch(err => res.json(err))
-    },
-    // update a thought 
-    updateThough({ params, body}, res) {
-        Thought.findOneAndUpdate({_id: params.thoughtId}, body, {new: true, runValidators: true}) //show the updated thought
-        .then(thoughtData => {
-            if (!thoughtData) {
-                res.status(404).json({message: `No thought found`})
-                return;
-            } res.json(thoughtData)
-        }) .catch(err => res.status(400).json(err))
     },
     //delete a thought
     deleteThought({params}, res) {

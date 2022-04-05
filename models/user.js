@@ -4,15 +4,15 @@ const usersSchema = new Schema(
     {
         username: {
             type: String, 
+            required: true, 
             unique: true,
-            required: true,
             trim: true
         },
         email: {
             type: String,
-            unique: true,
             required: true,
-            match:  [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email'] //regex for matching
+            unique: true,
+            match:  [/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/] //regex for matching
         },
         thoughts: {
             type: Schema.Types.ObjectId,
@@ -22,17 +22,24 @@ const usersSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: `User`
         }
+    },
+    {
+        toJSON: {
+            virtuals: true,
+            // getters: true
+        },
+        id: false
     }
 )
-//creating user model
-const User = model(`User`, usersSchema)
+
 //retrieves length of friends array
 usersSchema.virtual(`friendCount`).get(function () {
     return this.friends.length
 } )
-
+//creating user model
+const User = model(`User`, usersSchema)
 //export model
-module.exports = { User }
+module.exports =  User
 
 
 

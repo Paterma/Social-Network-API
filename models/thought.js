@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-const dateFormat = require('../utils/seeds');
+const moment = require('moment');
 const reactionsSchema = require('./reaction');
 
 //creating thoughts schema
@@ -14,13 +14,20 @@ const thoughtsSchema = new Schema(
         createdAt: {
             type: Date,
             default:Date.now,
-            // get: (createdAtVal) => dateFormat(createdAtVal)
+            get: (createdAtVal) => moment(createdAtVal).format('MMMM Do YYYY, [at] hh:mm a')
         },
         username: {
             type: String, 
             required: true
         },
         reactions: [reactionsSchema]
+    },
+    {
+        toJSON: {
+            // virtuals: true,
+            getters: true
+        },
+        id: false
     }
 )
 //retirieving lenght of thoughts array
@@ -30,7 +37,7 @@ thoughtsSchema.virtual(`reactionCount`).get(function () {
 //creating user model
 const Thought = model('Thought', thoughtsSchema)
 //export
-module.exports = { Thought }
+module.exports = Thought 
 
 
 
