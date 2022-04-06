@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const {
-    getThoughts,
     addThought,
+    getThoughts,
     updateThought,
     getThoughtById,
     deleteThought,
@@ -10,15 +10,15 @@ const {
 } = require('../../controllers/thought-controller');
 
 
-router.route('/').get(getThoughts).post(addThought)
-// router.route('/:userId').post(addThought);
-
+router.route('/').get(getThoughts) //.post(addThought)
+router
+.route('/:userId').post(addThought);
+// paterma 624cc19c9fc459d44cc91465
 router
     .route('/:thoughtId')
     .put(updateThought)
     .get(getThoughtById)
     
-
 router
     .route('/:userId/:thoughtId')
     .delete(deleteThought);

@@ -3,6 +3,26 @@ const User = require(`../models/user`);
 
 //create a thought object
 const thoughtController = {
+// add a thought
+addThought({params, body}, res) {
+    Thought.create(body)
+    .then((data) => {
+        console.log(data)
+        return User.findOneAndUpdate(
+            {_id: params.userId},
+            {$push: {thought: _id}}, //pushing the new thought to the array
+            {new: true} //show the new thought
+        )
+        })
+        .then(userData => {
+            if (!userData) {
+                res.status(404).json({message: `No user found`})
+                return;
+            }
+            res.json(userData)
+        }) .catch(err => res.json(err))
+    },
+    // get thoughts
     getThoughts(req, res) {
         Thought.find({})
         .then(thoughtData => res.json(thoughtData))
@@ -34,26 +54,6 @@ getThoughtById({params}, res) {
                 return;
             } res.json(thoughtData)
         }) .catch(err => res.status(400).json(err))
-    },
-// add a thought
-addThought({params, body}, res) {
-    console.log
-    Thought.create(body)
-    .then((data) => {
-        console.log(data)
-        return User.findOneAndUpdate(
-            {_id: params.userId},
-            {$push: {thoughts: _id}}, //pushing the new thought to the array
-            {new: true} //show the new thought
-        )
-        })
-        .then(userData => {
-            if (!userData) {
-                res.status(404).json({message: `No user found`})
-                return;
-            }
-            res.json(userData)
-        }) .catch(err => res.json(err))
     },
     //delete a thought
     deleteThought({params}, res) {

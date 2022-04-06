@@ -1,6 +1,17 @@
 const User = require('../models/user');
 
 const userController = {
+    //create new user
+createUser({body}, res) {
+    User.create(body)
+    .then(userData => {
+        console.log(userData)
+        res.json(userData)
+        console.log("Success")
+    })
+    .catch(err => res.status(400).json(err))
+},
+//find a user
     getUser(req, res) { //get all users
         User.find({})
         .then(userData => res.json(userData))
@@ -34,16 +45,6 @@ updateUser({params, body}, res) {
         return;
     } res.json(userData)
     }) .catch(err => res.status(400).json(err))
-},
-//create new user
-createUser({body}, res) {
-    User.create(body)
-    .then(userData => {
-        console.log(userData)
-        res.json(userData)
-        console.log("Success")
-    })
-    .catch(err => res.status(400).json(err))
 },
 //delete a user
 deleteUser({params}, res) {
