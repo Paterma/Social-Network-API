@@ -51,9 +51,10 @@ deleteUser({params}, res) {
     User.findOneAndDelete({_id: params.id})
     .then(userData => {
         if(!userData) {
-            return res.status(404).json({message: `No user found`})
-        }
-    })
+        res.status(404).json({message: `No user found`})
+        return;
+        } res.json(userData)
+    }) .catch(err => res.status(400).json(err))
 },
 // add a friend 
 addAFriend({params}, res) {

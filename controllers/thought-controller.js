@@ -1,10 +1,10 @@
-const { Thought } = require(`../models/thought`);
+const Thought  = require(`../models/thought`);
 const User = require(`../models/user`);
 
 //create a thought object
 const thoughtController = {
 // add a thought
-addThought({params, body}, res) {
+addThought({body}, res) {
     Thought.create(body)
     .then((data) => {
         console.log(data)
@@ -12,7 +12,7 @@ addThought({params, body}, res) {
             {_id: params.userId},
             {$push: {thought: _id}}, //pushing the new thought to the array
             {new: true} //show the new thought
-        )
+        ) 
         })
         .then(userData => {
             if (!userData) {
@@ -76,14 +76,14 @@ getThoughtById({params}, res) {
         }) .catch(err => res.json(err))
     },
     // add a reaction
-    addReaction({params, body}, res) {
+    addReaction(req, res) {
         Thought.findOneAndUpdate(
-            {_id: params.thoughtId},
-            {$addToSet: {reactions: body}},
-            {new: true, runValidators: true}
+            {_id: req.params.thoughtId},
+            {$addToSet: {reactions: req.body}},
+            {new: true}
         ) .then(thoughtData => {
             if (!thoughtData) {
-                return res.status(404).jaon({message: `No thought found`})
+                return res.status(404).json({message: `No thought found`})
             }
             res.json(thoughtData)
         }) .catch(err => res.json(err))
@@ -92,8 +92,8 @@ getThoughtById({params}, res) {
 deleteReaction({params}, res) {
     Thought.findOneAndUpdate(
         {_id: params.thoughtId},
-        {$pull: {reactions: {reactionId: params.reactionId}}},
-        {runValidators: true, new: true}
+        {$pull: {reactions: {reactionId: params.reactionId}}}, //_id
+        {new: true}
     ) .then(userData => res.json(userData))
     .catch(err => res.json(err))
     }
