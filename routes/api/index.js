@@ -7,6 +7,3 @@ router.use('/thoughts', thoughtRoutes);
 
 module.exports = router;
 
-
-
-//paterma ID 624cc19c9fc459d44cc91465
