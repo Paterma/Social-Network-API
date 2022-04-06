@@ -58,9 +58,10 @@ deleteUser({params}, res) {
 },
 // add a friend 
 addAFriend({params}, res) {
+    console.log(params.friendId)
     User.findOneAndUpdate({_id: params.id}, 
-        {$addToSet: {friends: params.friendsId}},
-        {runValidators: true})
+        {$addToSet: {friends: params.friendId}},
+        {new: true})
         .then(userData => {
         if (!userData) {
             res.status(404).json({message: `No user found`})
@@ -71,7 +72,7 @@ addAFriend({params}, res) {
 //delete a friend
 deleteFriend({params}, res) {
     User.findOneAndUpdate({_id: params.id}, 
-        {$pull: {friends:params.friendId}},
+        {$pull: {friends: params.friendId}},
         {runValidators: true})
         .then(userData => {
             if (!userData) {
