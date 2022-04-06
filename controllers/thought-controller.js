@@ -1,16 +1,17 @@
+const req = require("express/lib/request");
 const Thought  = require(`../models/thought`);
 const User = require(`../models/user`);
 
 //create a thought object
 const thoughtController = {
 // add a thought
-addThought({body}, res) {
-    Thought.create(body)
+addThought(req, res) {
+    Thought.create(req.body)
     .then((data) => {
         console.log(data)
         return User.findOneAndUpdate(
-            {_id: params.userId},
-            {$push: {thought: _id}}, //pushing the new thought to the array
+            {_id: req.params.userId},
+            {$push: {thoughts: data._id}}, //pushing the new thought to the array
             {new: true} //show the new thought
         ) 
         })
@@ -37,8 +38,8 @@ getThoughtById({params}, res) {
     Thought.findOne({_id: params.thoughtId})
     .then(thoughtData => {
         if (!thoughtData) {
-            res.status(404).json(err);
-            return;
+            
+            return res.status(404).json({message: "thought not found"});
         } res.json(thoughtData)
     }) .catch (err => {
         console.log(err);
@@ -77,11 +78,13 @@ getThoughtById({params}, res) {
     },
     // add a reaction
     addReaction(req, res) {
-        Thought.findOneAndUpdate(
+        console.log(req.body)
+        Thought.findOneAndUpdate(   
             {_id: req.params.thoughtId},
-            {$addToSet: {reactions: req.body}},
+            {$push: {reactions: req.body}},
             {new: true}
         ) .then(thoughtData => {
+            console.log(thoughtData)
             if (!thoughtData) {
                 return res.status(404).json({message: `No thought found`})
             }
