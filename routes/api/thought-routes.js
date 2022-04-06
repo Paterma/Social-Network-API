@@ -12,7 +12,7 @@ const {
 
 router.route('/').get(getThoughts) //.post(addThought)
 router.route('/:userId').post(addThought);
-// paterma 624cc19c9fc459d44cc91465
+
 router
     .route('/:thoughtId')
     .put(updateThought)

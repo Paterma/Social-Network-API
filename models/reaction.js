@@ -11,8 +11,8 @@ const reactionsSchema = new Schema(
         reactionBody: {
             type: String,
             required: true,
-            minlenght: 1, 
-            maxLenght: 280
+            minlength: 1, 
+            maxLength: 280
         },
         username: {
             type: String,
@@ -33,4 +33,4 @@ const reactionsSchema = new Schema(
     }
 )
 //export
-module.exports = { reactionsSchema }
+module.exports = reactionsSchema 

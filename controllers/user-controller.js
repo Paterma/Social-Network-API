@@ -25,6 +25,7 @@ getUserById({params}, res) {
     User.findOne({_id: params.id})
     .populate(`thoughts`)
     .populate(`friends`)
+    .populate(`username`)
     .select(`__v`)
     .then(userData => {
         if(!userData) {
